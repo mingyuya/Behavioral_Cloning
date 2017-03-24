@@ -1,6 +1,6 @@
 # Writeup for P3:Behavioral Cloning
 
-## Matt, Min-gyu, Kim ### in Jan Cohort
+## ***Matt, Min-gyu, Kim*** in Jan Cohort
 
 ---
 
