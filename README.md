@@ -25,24 +25,24 @@ The goals / steps of this project are the following:
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Files Submitted & Code Quality
-
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### Required Files
 
 Here is the list of the files in my submission:
-|model.py| containing the script to create and train the model|
-|drive.py| for driving the car in autonomous mode|
-|model.h5| containing a trained convolution neural network |
-|README.md| writeup for summarizing the results|
+|model.py| Containing the script to define and train the model|
+|drive.py| For driving the car in autonomous mode|
+|model.h5| Containing a trained convolution neural network |
+|README.md| Writeup for summarizing the results|
+|video.mp4| The video clip which is the result of simulation |
 
-####2. Submission includes functional code
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
+#### Quality of Code
+1) Using the provided simulator and my drive.py file, the car can be driven autonomously and safely around the track by executing 
 ```sh
 python drive.py model.h5
 ```
+2) The code, **model.py**, has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter. It can prevent lack of memories during the training.  (Line:--)
 
 ####3. Submission code is usable and readable
 
