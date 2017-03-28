@@ -1,10 +1,7 @@
 # Writeup for P3:Behavioral Cloning
 
-## ***Matt, Min-gyu, Kim*** in Jan Cohort
-
+### **Matt, Min-gyu, Kim** in Jan Cohort
 ---
-
-**Behavioral Cloning Project**
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -31,11 +28,13 @@ The goals / steps of this project are the following:
 #### Required Files
 
 Here is the list of the files in my submission:
-|model.py| Containing the script to define and train the model|
-|drive.py| For driving the car in autonomous mode|
-|model.h5| Containing a trained convolution neural network |
-|README.md| Writeup for summarizing the results|
-|video.mp4| The video clip which is the result of simulation |
+
+| ------ | ----- |
+| model.py | Containing the script to define and train the model |
+| drive.py | For driving the car in autonomous mode |
+| model.h5 | Containing a trained convolution neural network |
+| README.md | Writeup for summarizing the results |
+| video.mp4 | The video clip which is the result of simulation |
 
 #### Quality of Code
 1) Using the provided simulator and my drive.py file, the car can be driven autonomously and safely around the track by executing 
