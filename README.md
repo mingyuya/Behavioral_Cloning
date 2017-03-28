@@ -29,6 +29,7 @@ The goals / steps of this project are the following:
 
 Here is the list of the files in my submission:
 
+| File | Description |
 | ------ | ----- |
 | model.py | Containing the script to define and train the model |
 | drive.py | For driving the car in autonomous mode |
