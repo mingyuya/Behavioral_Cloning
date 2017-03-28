@@ -58,22 +58,10 @@ def generator(samples, batch_size=32):
                 images.append(flipped_center_img)
                 angles.append(flipped_center_ang)
 
-                #name = batch_sample[1] # LeftRight
-                #images.append(cv2.imread(name))
-                #name = batch_sample[2] # Right
-                #images.append(cv2.imread(name))
-                ##left_ang  = center_ang + atan(radians(center_ang))
-                ##right_ang = center_ang + atan(radians(-center_ang))
-                #left_ang  = center_ang + 0.02
-                #right_ang = center_ang - 0.02
-                #angles.append(left_ang)
-                #angles.append(right_ang)
-
             X_train = np.array(images)
             y_train = np.array(angles)
             yield shuffle(X_train, y_train)
 
-# compile and train the model using the generator function
 train_generator      = generator(train_samples,      batch_size=b_size)
 validation_generator = generator(validation_samples, batch_size=b_size)
 
@@ -83,15 +71,16 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers.pooling import MaxPooling2D
 from keras.optimizers import Adam
 
-#############################################################################
+####################################################################################
 # Define the model
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
 # 1) Based on Nvidia's Model
-# 2) Batch Normalization and ELU (Exponenetial Linear Unit) were adapted
-# 3) 'tanh' is used as activation function for the last layer (-1 < Out < +1)
+# 2) Batch Normalization and Exponenetial Linear Unit for fast and accurate training
+# 3) Dropout to avoid that the model is overfitted to driving straight
+# 4) No activation at the last layer in this (regression) case
 # 4) Optimizer : Adam
 # 5) Loss function : MSE
-#############################################################################
+####################################################################################
 model = Sequential()
 model.add(Lambda(lambda x: (x / 127.5) - 1., input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((70,20),(0,0)), input_shape=(160, 320, 3)))
@@ -111,7 +100,7 @@ model.add(Conv2D(64, 3, 3))
 model.add(BatchNormalization())
 model.add(Activation('elu'))
 model.add(Flatten())
-model.add(Dropout(0.9))
+model.add(Dropout(0.8))
 model.add(Dense(100))
 model.add(BatchNormalization())
 model.add(Activation('elu'))
@@ -120,7 +109,6 @@ model.add(BatchNormalization())
 model.add(Activation('elu'))
 model.add(Dense(10))
 model.add(BatchNormalization())
-#model.add(Activation('tanh'))
 model.add(Dense(1))
 
 adam = Adam(lr = lr_rate)
@@ -135,6 +123,15 @@ history_object = model.fit_generator(train_generator,
 
 model.save('model.h5')
 
+####################################################################################
+# The code for plotting the training and validation loss history can be added here
+####################################################################################
+#plt.plot(history_object.history['loss'])
+#plt.plot(history_object.history['val_loss'])
+
+###############################
+# Draw the architecture
+###############################
 from keras.utils.visualize_util import plot
 plot(model, to_file='model.png')
 
