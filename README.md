@@ -46,11 +46,11 @@ Here is the list of the files in my submission:
 
 ### Model Architecture and Training Strategy
 
-#### 1. An appropriate model architecture has been employed
+#### 1. Structure
+ My model has been built based on the [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) which is consisted of single normalization layer at the input stage, 5x5 convolutional layers and 3 fully connected layers. [ELU (Exponential Linear Unit)](https://arxiv.org/abs/1511.07289) is used as the activation layers and [Batch Normalization](http://cs231n.github.io/neural-networks-2/#batchnorm) layers are placed in before the each of activation layers for fast and accurate optimization. The detail is described in the following table.
 
-1. My model has been built based on the [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) which is consisted of single normalization layer at the input stage, 5x5 convolutional layers and 3 fully connected layers. [ELU (Exponential Linear Unit)](https://arxiv.org/abs/1511.07289) is used as the activation layers and [Batch Normalization](http://cs231n.github.io/neural-networks-2/#batchnorm) layers are placed in before the each of activation layers for fast and accurate optimization. 
-2. Dropout layer with the 0.8 of is for avoiding the model is overfitted to the data correspond to move straight forward. If Dropout layer has the rate higher than 0.8 or is not exist, the model after training pushed the car to outside when it is passing curve 
-3. As a result, the model consisted of 28 Keras layers was built. The detail is described in the following table.
+#### 2. To avoid overfittig
+ Dropout layer with the 0.8 of is for avoiding the model is overfitted to the data correspond to move straight forward. If Dropout layer has the rate higher than 0.8 or is not exist, the model after training pushed the car to outside when it is passing curve
 
 | Layer | Description | model.py lines |
 | ------ | ----- | :-----: |
@@ -83,9 +83,9 @@ Here is the list of the files in my submission:
 | BatchNormalization| | |
 | Fully Connected | 1 fan-out | |
 
-#### 3. Model parameter tuning
+#### 3. Opimizer and Training Parameter
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an **adam optimizer**. The learning rate was setted to **0.01** and was not tunned. Beacause Batch Normalization layer solves Vanishing-Gradient and Bad-Initial-Value Problem  
 
 #### 4. Appropriate training data
 
