@@ -22,10 +22,10 @@ The goals / steps of this project are the following:
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+#### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-#### Required Files
+### Required Files
 
 Here is the list of the files in my submission:
 
@@ -37,10 +37,10 @@ Here is the list of the files in my submission:
 | README.md | Writeup for summarizing the results |
 | video.mp4 | The video clip which is the result of simulation |
 
-#### Quality of Code
-1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter. (Line: --) It can prevent lack of memories during the training.
+### Quality of Code
+1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter. (Line: 39-66) It can prevent lack of memories during the training.
 
-2. At the end of ```model.py```, the figure of the network architecture si drawn. (Line: --)
+2. The network architecture is drawn at the end of ```model.py```. (Line: 135-136)
 
 3. Using the provided simulator and drive.py file, the car can be driven autonomously and safely around the track by executing ```python drive.py model.h5```
 
@@ -53,12 +53,36 @@ My model consists of a convolution neural network with 3x3 filter sizes and dept
 The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
 
 | Layer | Description | Line No.|
-| ------ | ----- | ----- |
-| model.py | Containing the script to define and train the model | |
-| drive.py | For driving the car in autonomous mode | |
-| model.h5 | Containing a trained convolution neural network | |
-| README.md | Writeup for summarizing the results | |
-| video.mp4 | The video clip which is the result of simulation | |
+| ------ | ----- | :-----: |
+| Lambda | Normalize the input value between -1 and +1 | 85 |
+| Cropping2D | For driving the car in autonomous mode | 86 |
+| Conv2D | 5x5x24, strides=(2,2), padding=valid | 87 |
+| BatchNormalization | | 88 |
+| Activation | Exponential Linear Unit | 89 |
+| Conv2D | 5x5x36, strides=(2,2), padding=valid | 90 |
+| BatchNormalization | | 91 |
+| Activation | Exponential Linear Unit | 92 |
+| Conv2D | 5x5x48, strides=(2,2), padding=valid | 93 |
+| BatchNormalization | | 94 |
+| Activation | Exponential Linear Unit | 95 |
+| Conv2D | 3x3x64, strides=(1,1), padding=valid | 96 |
+| BatchNormalization | | 97 |
+| Activation | elu | 98 |
+| Conv2D | 3x3x64 | 99 |
+| BatchNormalization | | 100|
+| Activation | elu | 101 |
+| Flatten | | 102 |
+| Dropout | Rate = 0.8 | 103 |
+| Fully Connected | 100 fan-out | 104 |
+| BatchNormalization | | 105 |
+| Activation | elu | 106 |
+| Fully Connected | 50 fan-out| 107 |
+| BatchNormalization | | 108 |
+| Activation | elu | 109 |
+| Fully Connected | 10 fan-out | 110 |
+| BatchNormalization| | |
+| Fully Connected | 1 fan-out | |
+
 
 #### 2. Attempts to reduce overfitting in the model
 
