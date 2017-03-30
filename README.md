@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./figures/angle_org.png "Data Distribution"
-[image2]: ./examples/placeholder.png "Grayscaling"
+[image2]: ./figures/sample_frontexamples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 [image4]: ./examples/placeholder_small.png "Recovery Image"
 [image5]: ./examples/placeholder_small.png "Recovery Image"
@@ -48,10 +48,10 @@ Here is the list of the files in my submission:
 
 #### 1. Structure
  
-1) **I started from [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) **. 
+1) **I started from [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/).** 
 2) **[Batch Normalization](https://arxiv.org/abs/1502.03167) layers were added.** It is known as practical solution for _Bad-Initialization_ and _Vanishing-Gradient_ problems by reducing internal covariance shift between each mini-batch of whole training sequence. As a result, trying to find optimal learning rate was meaningless. Moreover, validation loss was drastically decreased compared to the model without Batch Normalizaiton,.
 3) **Changed the activations from RELU to [ELU](https://arxiv.org/abs/1511.07289).** It showed better accuracy in the simulation.
-4) Nvidia's model has a lot of parameters so, it is easy to be overfitted. I could see the car driven by model of step 3 tended to be very close to outside - as the result of being overfitted to the data about moving straight. Therefore, **Dropout layer was added right after the Flatten layer.** Drop rate was fixed after a few experiments.
+4) Nvidia's model has a lot of parameters so, it is easy to be overfitted. I could see the car driven by model of step 3 tends to be very close to outside - as the result of being overfitted to the data about moving straight. Therefore, **Dropout layer was added right after the Flatten layer.** Drop rate was fixed after a few experiments.
 5) The final model (model.py lines: 84-112) is described in the following table.
 
 | Layer | Description |
@@ -94,19 +94,21 @@ Here is the list of the files in my submission:
 
 #### 3. Training data
 
-1) The training data was created by the training mode of the simulator.
-2) It is about the following cases:
+1) **Generation using the training mode of the simulator**
+ I drove the car myself for the below cases.
  | Case | Purpose|
  | --- | --- |
  | 3-lap of center lane driving | To capture good driving behavior |
  | Driving slowly around curves | To generate large number of data for this case |
  | Recovery from outside to center | To teach how to get back to center |
+ **Images captured by front-camera** and **steering angles** were recorded by the simulator. Here is an example image of center lane driving :
+ ![alt text][image2]
 
 #### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+
 
 Then I repeated this process on track two in order to get more data points.
 
