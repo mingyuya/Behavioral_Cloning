@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
+[image1]: ./figures/angle_org.png "Data Distribution"
 [image2]: ./examples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 [image4]: ./examples/placeholder_small.png "Recovery Image"
@@ -47,89 +47,66 @@ Here is the list of the files in my submission:
 ### Model Architecture and Training Strategy
 
 #### 1. Structure
- My model has been built based on the [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) which is consisted of single normalization layer at the input stage, 5x5 convolutional layers and 3 fully connected layers. [ELU (Exponential Linear Unit)](https://arxiv.org/abs/1511.07289) is used as the activation layers and [Batch Normalization](http://cs231n.github.io/neural-networks-2/#batchnorm) layers are placed in before the each of activation layers for fast and accurate optimization. The detail is described in the following table.
+ 
+1) **I started from [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) **. 
+2) **[Batch Normalization](https://arxiv.org/abs/1502.03167) layers were added.** It is known as practical solution for _Bad-Initialization_ and _Vanishing-Gradient_ problems by reducing internal covariance shift between each mini-batch of whole training sequence. As a result, trying to find optimal learning rate was meaningless. Moreover, validation loss was drastically decreased compared to the model without Batch Normalizaiton,.
+3) **Changed the activations from RELU to [ELU](https://arxiv.org/abs/1511.07289).** It showed better accuracy in the simulation.
+4) Nvidia's model has a lot of parameters so, it is easy to be overfitted. I could see the car driven by model of step 3 tended to be very close to outside - as the result of being overfitted to the data about moving straight. Therefore, **Dropout layer was added right after the Flatten layer.** Drop rate was fixed after a few experiments.
+5) The final model (model.py lines: 84-112) is described in the following table.
 
-#### 2. To avoid overfittig
- Dropout layer with the 0.8 of is for avoiding the model is overfitted to the data correspond to move straight forward. If Dropout layer has the rate higher than 0.8 or is not exist, the model after training pushed the car to outside when it is passing curve
+| Layer | Description |
+| ------ | ----- |
+| Lambda | Normalize the range of input values between -1 and +1 |
+| Cropping2D | To only care about the shape of lane line |
+| Conv2D | 5x5x24, strides=(2,2), padding=valid |
+| BatchNormalization | |
+| Activation | ELU |
+| Conv2D | 5x5x36, strides=(2,2), padding=valid |
+| BatchNormalization | |
+| Activation | ELU |
+| Conv2D | 5x5x48, strides=(2,2), padding=valid |
+| BatchNormalization | |
+| Activation | ELU |
+| Conv2D | 3x3x64, strides=(1,1), padding=valid |
+| BatchNormalization | |
+| Activation | ELU |
+| Conv2D | 3x3x64 |
+| BatchNormalization | |
+| Activation | ELU |
+| Flatten | |
+| Dropout | Rate = 0.8 |
+| Fully Connected | 1164 fan-in, 100 fan-out |
+| BatchNormalization | |
+| Activation | ELU |
+| Fully Connected | 50 fan-out |
+| BatchNormalization | |
+| Activation | ELU |
+| Fully Connected | 10 fan-out |
+| BatchNormalization| |
+| Fully Connected | 1 fan-out |
 
-| Layer | Description | model.py lines |
-| ------ | ----- | :-----: |
-| Lambda | Normalize the input value between -1 and +1 | 85 |
-| Cropping2D | For driving the car in autonomous mode | 86 |
-| Conv2D | 5x5x24, strides=(2,2), padding=valid | 87 |
-| BatchNormalization | | 88 |
-| Activation | Exponential Linear Unit | 89 |
-| Conv2D | 5x5x36, strides=(2,2), padding=valid | 90 |
-| BatchNormalization | | 91 |
-| Activation | Exponential Linear Unit | 92 |
-| Conv2D | 5x5x48, strides=(2,2), padding=valid | 93 |
-| BatchNormalization | | 94 |
-| Activation | Exponential Linear Unit | 95 |
-| Conv2D | 3x3x64, strides=(1,1), padding=valid | 96 |
-| BatchNormalization | | 97 |
-| Activation | elu | 98 |
-| Conv2D | 3x3x64 | 99 |
-| BatchNormalization | | 100|
-| Activation | elu | 101 |
-| Flatten | | 102 |
-| Dropout | Rate = 0.8 | 103 |
-| Fully Connected | 1164 fan-in, 100 fan-out | 104 |
-| BatchNormalization | | 105 |
-| Activation | elu | 106 |
-| Fully Connected | 50 fan-out| 107 |
-| BatchNormalization | | 108 |
-| Activation | elu | 109 |
-| Fully Connected | 10 fan-out | 110 |
-| BatchNormalization| | |
-| Fully Connected | 1 fan-out | |
+#### 2. Opimizer and Training Parameter
 
-#### 3. Opimizer and Training Parameter
+1) The model used an **adam optimizer**
+2) **Mean square error** is used as loss function.
+3) The learning rate was setted to **0.01**.
+4) **EPOCH is limited by 5**. The model tends do being overfitted when EPOCH is higher than 5.
 
-The model used an **adam optimizer**. The learning rate was setted to **0.01** and was not tunned. Beacause Batch Normalization layer solves Vanishing-Gradient and Bad-Initial-Value Problem  
+#### 3. Training data
 
-#### 4. Appropriate training data
-
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
-
-For details about how I created the training data, see the next section. 
-
-### Model Architecture and Training Strategy
-
-#### 1. Solution Design Approach
-
-The overall strategy for deriving a model architecture was to ...
-
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
-
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
-
-#### 2. Final Model Architecture
-
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+1) The training data was created by the training mode of the simulator.
+2) It is about the following cases:
+ | Case | Purpose|
+ | --- | --- |
+ | 3-lap of center lane driving | To capture good driving behavior |
+ | Driving slowly around curves | To generate large number of data for this case |
+ | Recovery from outside to center | To teach how to get back to center |
 
 #### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
 ![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
 
 Then I repeated this process on track two in order to get more data points.
 
