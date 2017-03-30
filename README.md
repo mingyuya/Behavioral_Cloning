@@ -10,13 +10,12 @@ The goals / steps of this project are the following:
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
-
 [//]: # (Image References)
 
-[image1]: ./figures/angle_org.png "Data Distribution"
-[image2]: ./figures/sample_frontexamples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
+[angle_org]: ./figures/angle_org.png "Original Data Distribution"
+[angle_augmented]: ./figures/angle_augmented.png "Augmented Data Distribution"
+[front_org]: ./figures/sample_org.png "Sample Original"
+[front_augmented]: ./figures/sample_flipped.png "Sample Augmented"
 [image5]: ./examples/placeholder_small.png "Recovery Image"
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
@@ -102,7 +101,7 @@ Here is the list of the files in my submission:
  | Driving slowly around curves | To generate large number of data for this case |
  | Recovery from outside to center | To teach how to get back to center |
  **Images captured by front-camera** and **steering angles** were recorded by the simulator. Here is an example image of center lane driving :
- ![alt text][image2]
+ ![alt text][sample_org]
 
 #### 3. Creation of the Training Set & Training Process
 
