@@ -101,7 +101,7 @@ Here is the list of the files in my submission:
  | Driving slowly around curves | To generate large number of data for this case |
  | Recovery from outside to center | To teach how to get back to center |
  **Images captured by front-camera** and **steering angles** were recorded by the simulator. Here is an example image of center lane driving :
- ![alt text][sample_org]
+ ![alt text][front_org]
 
 #### 3. Creation of the Training Set & Training Process
 
