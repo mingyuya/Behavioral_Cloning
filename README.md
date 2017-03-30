@@ -22,10 +22,10 @@ The goals / steps of this project are the following:
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+#### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-#### Required Files
+### Required Files
 
 Here is the list of the files in my submission:
 
@@ -37,38 +37,55 @@ Here is the list of the files in my submission:
 | README.md | Writeup for summarizing the results |
 | video.mp4 | The video clip which is the result of simulation |
 
-#### Quality of Code
-1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter. (Line: --) It can prevent lack of memories during the training.
+### Quality of Code
+1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter (Line: 39-66). It can prevent lack of memories during the training.
 
-2. At the end of ```model.py```, the figure of the network architecture si drawn. (Line: --)
+2. The network architecture is drawn at the end of ```model.py``` (Line: 135-136).
 
 3. Using the provided simulator and drive.py file, the car can be driven autonomously and safely around the track by executing ```python drive.py model.h5```
 
 ### Model Architecture and Training Strategy
 
-#### 1. An appropriate model architecture has been employed
+#### 1. Structure
+ My model has been built based on the [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) which is consisted of single normalization layer at the input stage, 5x5 convolutional layers and 3 fully connected layers. [ELU (Exponential Linear Unit)](https://arxiv.org/abs/1511.07289) is used as the activation layers and [Batch Normalization](http://cs231n.github.io/neural-networks-2/#batchnorm) layers are placed in before the each of activation layers for fast and accurate optimization. The detail is described in the following table.
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+#### 2. To avoid overfittig
+ Dropout layer with the 0.8 of is for avoiding the model is overfitted to the data correspond to move straight forward. If Dropout layer has the rate higher than 0.8 or is not exist, the model after training pushed the car to outside when it is passing curve
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+| Layer | Description | model.py lines |
+| ------ | ----- | :-----: |
+| Lambda | Normalize the input value between -1 and +1 | 85 |
+| Cropping2D | For driving the car in autonomous mode | 86 |
+| Conv2D | 5x5x24, strides=(2,2), padding=valid | 87 |
+| BatchNormalization | | 88 |
+| Activation | Exponential Linear Unit | 89 |
+| Conv2D | 5x5x36, strides=(2,2), padding=valid | 90 |
+| BatchNormalization | | 91 |
+| Activation | Exponential Linear Unit | 92 |
+| Conv2D | 5x5x48, strides=(2,2), padding=valid | 93 |
+| BatchNormalization | | 94 |
+| Activation | Exponential Linear Unit | 95 |
+| Conv2D | 3x3x64, strides=(1,1), padding=valid | 96 |
+| BatchNormalization | | 97 |
+| Activation | elu | 98 |
+| Conv2D | 3x3x64 | 99 |
+| BatchNormalization | | 100|
+| Activation | elu | 101 |
+| Flatten | | 102 |
+| Dropout | Rate = 0.8 | 103 |
+| Fully Connected | 1164 fan-in, 100 fan-out | 104 |
+| BatchNormalization | | 105 |
+| Activation | elu | 106 |
+| Fully Connected | 50 fan-out| 107 |
+| BatchNormalization | | 108 |
+| Activation | elu | 109 |
+| Fully Connected | 10 fan-out | 110 |
+| BatchNormalization| | |
+| Fully Connected | 1 fan-out | |
 
-| Layer | Description | Line No.|
-| ------ | ----- | ----- |
-| model.py | Containing the script to define and train the model | |
-| drive.py | For driving the car in autonomous mode | |
-| model.h5 | Containing a trained convolution neural network | |
-| README.md | Writeup for summarizing the results | |
-| video.mp4 | The video clip which is the result of simulation | |
+#### 3. Opimizer and Training Parameter
 
-#### 2. Attempts to reduce overfitting in the model
-
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
-
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
-
-#### 3. Model parameter tuning
-
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an **adam optimizer**. The learning rate was setted to **0.01** and was not tunned. Beacause Batch Normalization layer solves Vanishing-Gradient and Bad-Initial-Value Problem  
 
 #### 4. Appropriate training data
 
