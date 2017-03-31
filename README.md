@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 
 [angle_org]: ./figures/angle_org.png "Original Data Distribution"
 [angle_augmented]: ./figures/angle_augmented.png "Augmented Data Distribution"
-[front_org]: ./figures/sample_org.png "Sample Original"
+[sample_org]: ./figures/sample_org.png "Sample Original"
 [front_augmented]: ./figures/sample_flipped.png "Sample Augmented"
 [image5]: ./examples/placeholder_small.png "Recovery Image"
 [image6]: ./examples/placeholder_small.png "Normal Image"
@@ -37,11 +37,11 @@ Here is the list of the files in my submission:
 | video.mp4 | The video clip which is the result of simulation |
 
 ### Quality of Code
-1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter (Line: 39-66). It can prevent lack of memories during the training.
+#### 1. ```model.py``` has the pipeline for training, validating and saving the model. For the training stage, Python generator is used because of the model based on Nvidia's one which has so many parameter (Line: 39-66). It can prevent lack of memories during the training.
 
-2. The network architecture is drawn at the end of ```model.py``` (Line: 135-136).
+#### 2. The network architecture is drawn at the end of ```model.py``` (Line: 135-136).
 
-3. Using the provided simulator and drive.py file, the car can be driven autonomously and safely around the track by executing ```python drive.py model.h5```
+#### 3. Using the provided simulator and drive.py file, the car can be driven autonomously and safely around the track by executing ```python drive.py model.h5```
 
 ### Model Architecture and Training Strategy
 
@@ -93,34 +93,28 @@ Here is the list of the files in my submission:
 
 #### 3. Training data
 
-1) **Generation using the training mode of the simulator**
- I drove the car myself for the below cases.
- | Case | Purpose|
- | --- | --- |
- | 3-lap of center lane driving | To capture good driving behavior |
+1) Generation using the training mode of the simulator
+ I drove the car myself for the below cases. **Images captured by front-camera** and **steering angles** were recorded by the simulator.
+ 
+ | Case | Purpose |
+ | ---- | ------- |
+ | 3 laps of center lane driving | To capture good driving behavior |
  | Driving slowly around curves | To generate large number of data for this case |
  | Recovery from outside to center | To teach how to get back to center |
- **Images captured by front-camera** and **steering angles** were recorded by the simulator. Here is an example image of center lane driving :
- ![alt text][front_org]
+ 
+ As the result, I could have ~40K number of data. Here is an example image of center lane driving :
+ ![alt text][sample_org]
 
-#### 3. Creation of the Training Set & Training Process
+2) Shuffle
+ The collected data belong to three different cases is shuffled (model.py line: 25) and separated (model.py line: 26) into training set (80%) and validation set (20%).
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+3) Augmentation (model.py lines: 55 - 59)
+ The collected data after the driving was not balanced as you can see in the below.
+ ![alt text][angle_org]
+ 
+ I flipped images and angles to make it balanced. Here is the distribution of augmented data :
+ ![alt text][angle_augmented]
 
+### Simulation
 
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+ Finally, the car was driving safely and continuously. It can be confirmed at ```video.mp4```.
