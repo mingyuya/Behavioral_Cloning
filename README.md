@@ -94,6 +94,7 @@ Here is the list of the files in my submission:
 #### 3. Training data
 
 * Generation using the training mode of the simulator
+
  I drove the car myself for the below cases. **Images captured by front-camera** and **steering angles** were recorded by the simulator.
  
   | Case | Purpose |
@@ -106,9 +107,11 @@ Here is the list of the files in my submission:
  ![alt text][sample_org]
 
 * Shuffle
+
  The collected data belong to three different cases is shuffled (model.py line: 25) and separated (model.py line: 26) into training set (80%) and validation set (20%).
 
 * Augmentation (model.py lines: 55 - 59)
+
  The collected data after the driving was not balanced as you can see in the below.
  ![alt text][angle_org]
  
