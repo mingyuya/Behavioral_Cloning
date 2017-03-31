@@ -112,7 +112,7 @@ Here is the list of the files in my submission:
 
 * Augmentation (model.py lines: 55 - 59)
   
-  The collected data after the driving was not balanced - The number of negative-steering case is larger - is you can see in the below.
+  The collected data was not balanced - The number of negative-steering case is larger - is you can see in the below.
   ![alt text][angle_org]
  
   I flipped images and angles to make it balanced. Here is the distribution of augmented data :
