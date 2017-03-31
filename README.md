@@ -47,68 +47,68 @@ Here is the list of the files in my submission:
 
 #### 1. Structure
  
-1) **I started from [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/).** 
-2) **[Batch Normalization](https://arxiv.org/abs/1502.03167) layers were added.** It is known as practical solution for _Bad-Initialization_ and _Vanishing-Gradient_ problems by reducing internal covariance shift between each mini-batch of whole training sequence. As a result, trying to find optimal learning rate was meaningless. Moreover, validation loss was drastically decreased compared to the model without Batch Normalizaiton,.
-3) **Changed the activations from RELU to [ELU](https://arxiv.org/abs/1511.07289).** It showed better accuracy in the simulation.
-4) Nvidia's model has a lot of parameters so, it is easy to be overfitted. I could see the car driven by model of step 3 tends to be very close to outside - as the result of being overfitted to the data about moving straight. Therefore, **Dropout layer was added right after the Flatten layer.** Drop rate was fixed after a few experiments.
-5) The final model (model.py lines: 84-112) is described in the following table.
+* **I started from [Nvidia's model](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/).** 
+* **[Batch Normalization](https://arxiv.org/abs/1502.03167) layers were added.** It is known as practical solution for _Bad-Initialization_ and _Vanishing-Gradient_ problems by reducing internal covariance shift between each mini-batch of whole training sequence. As a result, trying to find optimal learning rate was meaningless. Moreover, validation loss was drastically decreased compared to the model without Batch Normalizaiton,.
+* **Changed the activations from RELU to [ELU](https://arxiv.org/abs/1511.07289).** It showed better accuracy in the simulation.
+* Nvidia's model has a lot of parameters so, it is easy to be overfitted. I could see the car driven by model without Dropout tends to be very close to outside - as the result of being overfitted to the data about moving straight. Therefore, **Dropout layer was added right after the Flatten layer.** Drop rate was fixed after a few experiments.
+* The final model (model.py lines: 84-112) is described in the following table.
 
-| Layer | Description |
-| ------ | ----- |
-| Lambda | Normalize the range of input values between -1 and +1 |
-| Cropping2D | To only care about the shape of lane line |
-| Conv2D | 5x5x24, strides=(2,2), padding=valid |
-| BatchNormalization | |
-| Activation | ELU |
-| Conv2D | 5x5x36, strides=(2,2), padding=valid |
-| BatchNormalization | |
-| Activation | ELU |
-| Conv2D | 5x5x48, strides=(2,2), padding=valid |
-| BatchNormalization | |
-| Activation | ELU |
-| Conv2D | 3x3x64, strides=(1,1), padding=valid |
-| BatchNormalization | |
-| Activation | ELU |
-| Conv2D | 3x3x64 |
-| BatchNormalization | |
-| Activation | ELU |
-| Flatten | |
-| Dropout | Rate = 0.8 |
-| Fully Connected | 1164 fan-in, 100 fan-out |
-| BatchNormalization | |
-| Activation | ELU |
-| Fully Connected | 50 fan-out |
-| BatchNormalization | |
-| Activation | ELU |
-| Fully Connected | 10 fan-out |
-| BatchNormalization| |
-| Fully Connected | 1 fan-out |
+  | Layer | Description |
+  | ------ | ----- |
+  | Lambda | Normalize the range of input values between -1 and +1 |
+  | Cropping2D | To only care about the shape of lane line |
+  | Conv2D | 5x5x24, strides=(2,2), padding=valid |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Conv2D | 5x5x36, strides=(2,2), padding=valid |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Conv2D | 5x5x48, strides=(2,2), padding=valid |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Conv2D | 3x3x64, strides=(1,1), padding=valid |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Conv2D | 3x3x64 |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Flatten | |
+  | Dropout | Rate = 0.8 |
+  | Fully Connected | 1164 fan-in, 100 fan-out |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Fully Connected | 50 fan-out |
+  | BatchNormalization | |
+  | Activation | ELU |
+  | Fully Connected | 10 fan-out |
+  | BatchNormalization| |
+  | Fully Connected | 1 fan-out |
 
 #### 2. Opimizer and Training Parameter
 
-1) The model used an **adam optimizer**
-2) **Mean square error** is used as loss function.
-3) The learning rate was setted to **0.01**.
-4) **EPOCH is limited by 5**. The model tends do being overfitted when EPOCH is higher than 5.
+* The model used an **adam optimizer**
+* **Mean square error** is used as loss function.
+* The learning rate was setted to **0.01**.
+* **EPOCH is limited by 5**. The model tends do being overfitted when EPOCH is higher than 5.
 
 #### 3. Training data
 
-1) Generation using the training mode of the simulator
+* Generation using the training mode of the simulator
  I drove the car myself for the below cases. **Images captured by front-camera** and **steering angles** were recorded by the simulator.
  
- | Case | Purpose |
- | ---- | ------- |
- | 3 laps of center lane driving | To capture good driving behavior |
- | Driving slowly around curves | To generate large number of data for this case |
- | Recovery from outside to center | To teach how to get back to center |
+  | Case | Purpose |
+  | ---- | ------- |
+  | 3 laps of center lane driving | To capture good driving behavior |
+  | Driving slowly around curves | To generate large number of data for this case |
+  | Recovery from outside to center | To teach how to get back to center |
  
  As the result, I could have ~40K number of data. Here is an example image of center lane driving :
  ![alt text][sample_org]
 
-2) Shuffle
+* Shuffle
  The collected data belong to three different cases is shuffled (model.py line: 25) and separated (model.py line: 26) into training set (80%) and validation set (20%).
 
-3) Augmentation (model.py lines: 55 - 59)
+* Augmentation (model.py lines: 55 - 59)
  The collected data after the driving was not balanced as you can see in the below.
  ![alt text][angle_org]
  
