@@ -1,6 +1,6 @@
 # Writeup for P3:Behavioral Cloning
 
-### Matt, Min-gyu, Kim
+### Matt, MinGyu, Kim
 ---
 
 The goals / steps of this project are the following:
